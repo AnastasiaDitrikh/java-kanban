@@ -9,10 +9,9 @@ import java.util.List;
 public interface TaskManager {
 
 
-
-
- //Task
+    //Task
     List<Task> getHistory();
+
     void saveTask(Task task);
 
     List<Task> getListAllTask();
