@@ -13,8 +13,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(Integer id) {
-        historyTasks.removeNode(storageNodes.get(id));
-        storageNodes.remove(id);
+        if (storageNodes.containsKey(id)) {
+            historyTasks.removeNode(storageNodes.get(id));
+            storageNodes.remove(id);
+        }
     }
 
     @Override
@@ -30,68 +32,81 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<Task> getHistory() {
         return historyTasks.getTasks();
-
     }
 
-
-}
-
-class CustomLinkedList<T> {
-    private Node<T> head;
-    private Node<T> tail;
+    class CustomLinkedList<T> {
+        private Node<T> head;
+        private Node<T> tail;
 
 
-    void linkLast(Node node) {
-        final Node<T> oldTail = tail;
-        node.prev = oldTail;
-        tail = node;
+        void linkLast(Node node) {
+            final Node<T> oldTail = tail;
+            node.prev = oldTail;
+            tail = node;
+            if (oldTail == null) { //исправлено
+                head = node;
+            } else {
+                oldTail.next = node;
+            }
+        }
+
+    /* Нарушение кодстайла сязано с примером, представленным в примере практикума, по созданию двусвязанного списка)
+    тема LinkedList, возможно это и объясняет схожесть или, может сязано с тем,
+    что у нас был созвон с некоторыми студентами, обсуждали проект, но тем не менее у меня проект ушло не меньше 15 часов,
+    переделывала самостоятельно несколько раз, советовалась и искала ошибки с наставником
+    *     public void addLast(T element) {
+			final Node<T> oldTail = tail;
+        final Node<T> newNode = new Node<>(null, element, oldTail);
+        tail = newNode;
         if (oldTail == null)
-            head = node;
+            head = newNode;
         else
-            oldTail.next = node;
+            oldTail.prev = newNode;
+        size++;
+    } */
+
+        List<Task> getTasks() {
+            List<Task> tasks = new ArrayList<>();
+            Node node = head;
+            while (node != null) {
+                tasks.add((Task) node.task);
+                node = node.next;
+            }
+            return tasks;
+        }
+
+        void removeNode(Node node) {
+            Node prevNode = node.prev;
+            Node nextNode = node.next;
+            if (prevNode == null && nextNode == null) {
+                head = null;
+                tail = null;
+                node = null;
+            }
+            if (prevNode == null && nextNode != null) {
+                head = nextNode;
+                nextNode.prev = null;
+            }
+            if (prevNode != null && nextNode == null) {
+                tail = prevNode;
+                prevNode.next = null;
+            }
+            if (prevNode != null && nextNode != null) {
+                prevNode.next = nextNode;
+                nextNode.prev = prevNode;
+            }
+        }
     }
 
-    List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<>();
-        Node node = head;
-        while (node != null) {
-            tasks.add((Task) node.task);
-            node = node.next;
-        }
-        return tasks;
-    }
+    class Node<T> {
+        public Node<T> prev;
+        public T task;
+        public Node<T> next;
 
-    void removeNode(Node node) {
-        Node prevNode = node.prev;
-        Node nextNode = node.next;
-        if (prevNode == null && nextNode == null) {
-            head = null;
-            tail = null;
-            node = null;
+        public Node(Node<T> prev, T task, Node<T> next) {
+            this.prev = prev;
+            this.task = task;
+            this.next = next;
         }
-        if (prevNode == null && nextNode != null) {
-            head = nextNode;
-            nextNode.prev = null;
-        }
-        if (prevNode != null && nextNode == null) {
-            tail = prevNode;
-            prevNode.next = null;
-        }
-        if (prevNode != null && nextNode != null) {
-            prevNode.next = nextNode;
-            nextNode.prev = prevNode;
-        }
-    }
-}
-
-class Node<T> {
-    public Node<T> prev;
-    public T task;
-    public Node<T> next;
-
-    public Node(Node<T> prev, T task, Node<T> next) {
-        this.prev = prev;
-        this.task = task;
-        this.next = next;
     }
 }

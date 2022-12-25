@@ -136,7 +136,9 @@ public class Main {
         taskManager.getSubtaskById(subtask1Epic1.getId());
         taskManager.getTaskById(task1.getId());
         System.out.println(taskManager.getHistory());
-        taskManager.removeTaskById(task1.getId());
+        taskManager.removeTaskById(task2.getId());
+        //taskManager.deleteSubtasks();
+        taskManager.removeEpicById(epic1.getId());
         taskManager.removeAllEpic();
         taskManager.removeAllTask();
         System.out.println("Получение истории");
