@@ -1,3 +1,4 @@
+/*
 import model.*;
 import model.Subtask;
 import model.Epic;
@@ -9,7 +10,8 @@ public class Main {
     public static void main(String[] args) {
 
         checkMethods();
-        checkHistory();
+        //checkHistory();
+
     }
 
     public static void checkMethods() {
@@ -31,7 +33,7 @@ public class Main {
         System.out.println(taskManager.getTaskById(task2.getId()));
 
         System.out.println("Обновление  задачи");
-        taskManager.updateTask(new Task(task2.getId(), "Обучение", "План", NEW));
+        taskManager.updateTask(new Task(task2.getId(),"Обучение", "План", NEW));
         System.out.println(taskManager.getTaskById(task2.getId()));
 
         System.out.println("Удаление задачи по ID. Новый список задач:");
@@ -138,11 +140,16 @@ public class Main {
         System.out.println(taskManager.getHistory());
         taskManager.removeTaskById(task2.getId());
         //taskManager.deleteSubtasks();
-        taskManager.removeEpicById(epic1.getId());
-        taskManager.removeAllEpic();
-        taskManager.removeAllTask();
+        //taskManager.removeEpicById(epic1.getId());
+        //taskManager.removeAllEpic();
+        //taskManager.removeAllTask();
         System.out.println("Получение истории");
         System.out.println(taskManager.getHistory());
+
     }
 
-}
+
+
+    }
+
+}*/

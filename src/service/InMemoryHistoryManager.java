@@ -34,6 +34,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return historyTasks.getTasks();
     }
 
+
     class CustomLinkedList<T> {
         private Node<T> head;
         private Node<T> tail;
@@ -43,27 +44,14 @@ public class InMemoryHistoryManager implements HistoryManager {
             final Node<T> oldTail = tail;
             node.prev = oldTail;
             tail = node;
-            if (oldTail == null) { //исправлено
+            if (oldTail == null) {
                 head = node;
             } else {
                 oldTail.next = node;
             }
         }
 
-    /* Нарушение кодстайла сязано с примером, представленным в примере практикума, по созданию двусвязанного списка)
-    тема LinkedList, возможно это и объясняет схожесть или, может сязано с тем,
-    что у нас был созвон с некоторыми студентами, обсуждали проект, но тем не менее у меня проект ушло не меньше 15 часов,
-    переделывала самостоятельно несколько раз, советовалась и искала ошибки с наставником
-    *     public void addLast(T element) {
-			final Node<T> oldTail = tail;
-        final Node<T> newNode = new Node<>(null, element, oldTail);
-        tail = newNode;
-        if (oldTail == null)
-            head = newNode;
-        else
-            oldTail.prev = newNode;
-        size++;
-    } */
+
 
         List<Task> getTasks() {
             List<Task> tasks = new ArrayList<>();

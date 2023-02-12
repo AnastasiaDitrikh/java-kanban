@@ -10,10 +10,22 @@ public class Subtask extends Task {
         super(name, description, status);
     }
 
-    public Subtask(String name, String description, Status status, Integer id) {
-        super(id, name, description, status);
+   public Subtask(Integer id, String name, String description, Status status) {
+       super(id, name, description, status);
     }
 
+    public Subtask(Integer id, TypeTask type, String name, String description, Status status) {
+        super(id, type, name, description, status);
+    }
+public Subtask(Integer id, TypeTask type, String name, String description, Status status, Integer epicId) {
+            super(id, type, name, description, status);
+            this.epicId=epicId;
+    }
+
+    @Override
+    public String toString() {
+        return  super.toString()+getEpicId();
+    }
     public Integer getEpicId() {
         return epicId;
     }

@@ -12,6 +12,8 @@ public interface TaskManager {
     //Task
     List<Task> getHistory();
 
+    void add(Task task);
+
     void saveTask(Task task);
 
     List<Task> getListAllTask();

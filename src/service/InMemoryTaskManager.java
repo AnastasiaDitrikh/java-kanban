@@ -1,5 +1,4 @@
 package service;
-
 import model.*;
 
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import static model.Status.*;
+import static model.TypeTask.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -15,9 +15,15 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Integer, Epic> epics = new HashMap<>();
     HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
+
+
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     Integer id = 0;
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
 
     //Task
     @Override
@@ -25,10 +31,18 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+
+    @Override
+    public void add(Task task) {
+        historyManager.add(task);
+    }
+
+
     @Override
     public void saveTask(Task task) {
         tasks.put(id, task);
         task.setStatus(NEW);
+        task.setTypeTask(TASK);
         task.setId(id);
         id += 1;
     }
@@ -42,9 +56,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeAllTask() {
         Set<Integer> setKeys = tasks.keySet();
-        for (Integer k : setKeys) { //проверка contains перенесена из всех методов по удалению в historyManager.remove,
-            // это действительно упростило код во всех методах здесь, жаль, что я вчера не догадалась,
-            //мало того, выяснилось, что методы contains здесь работали неккоректно, сейчас проблемы устранены
+        for (Integer k : setKeys) {
             historyManager.remove(k);
         }
         tasks.clear();
@@ -77,6 +89,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void saveEpic(Epic epic) {
         epics.put(id, epic);
         epic.setStatus(NEW);
+        epic.setTypeTask(EPIC);
         epic.setId(id);
         id += 1;
     }
@@ -117,7 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void findEpicStatus(Epic epic) {
+    private void findEpicStatus(Epic epic) {  //может это причина?
         if (epic.subtaskIdList.size() == 0) {
             epic.setStatus(NEW);
             return;
@@ -158,6 +171,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void saveSubtask(Integer epicId, Subtask subtask) {
         Epic epicWithSubtask = epics.get(epicId);
         subtask.setStatus(NEW);
+        subtask.setTypeTask(SUBTASK);
         subtasks.put(id, subtask);
         subtask.setId(id);
         subtask.setEpicId(epicId);

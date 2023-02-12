@@ -3,11 +3,26 @@ package model;
 import java.util.Objects;
 
 public class Task {
+
+
     private Integer id;
+    private TypeTask type;
     private String name;
     private String description;
     private Status status;
 
+    public Task(Integer id, TypeTask type, String name, String description, Status status) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return  id +","+ type +","+ name+ ","+ status+","+ description+",";
+    }
 
     public Task(Integer id, String name, String description, Status status) {
         this.id = id;
@@ -59,20 +74,20 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
+        return Objects.equals(id, task.id) && type == task.type && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, status);
+        return Objects.hash(id, type, name, description, status);
     }
 
-    @Override
-    public String toString() {
-        return "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status;
+    public TypeTask getTypeTask() {
+        return type;
+    }
+
+    public void setTypeTask(TypeTask typeTask) {
+        this.type = typeTask;
     }
 }
 

@@ -16,7 +16,9 @@ public class Epic extends Task {
         super(name, description, status);
     }
     public Epic(Integer id, String name, String description, Status status) {
-        super(id, name, description, status);
+        super(id, name, description, status);}
+    public Epic(Integer id, TypeTask type, String name, String description, Status status) {
+        super(id, type, name, description, status);
     }
 
     public List<Integer> getSubtaskIdList() {
@@ -27,7 +29,10 @@ public class Epic extends Task {
         this.subtaskIdList = subtaskIdList;
     }
 
-
+    @Override
+    public String toString() {
+        return  super.toString();
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
