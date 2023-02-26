@@ -1,5 +1,6 @@
-package model;
+package managers.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -10,16 +11,17 @@ public class Subtask extends Task {
         super(name, description, status);
     }
 
-   public Subtask(Integer id, String name, String description, Status status) {
-       super(id, name, description, status);
-    }
 
-    public Subtask(Integer id, TypeTask type, String name, String description, Status status) {
-        super(id, type, name, description, status);
-    }
 public Subtask(Integer id, TypeTask type, String name, String description, Status status, Integer epicId) {
             super(id, type, name, description, status);
             this.epicId=epicId;
+    }
+    public Subtask(Integer id, TypeTask type, String name, String description, Status status,Integer epicId, LocalDateTime startTime, long duration) {
+        super(id, type, name, description, status, startTime, duration);
+        this.epicId = epicId;
+    }
+    public Subtask(String name, String description, LocalDateTime startTime, long duration) {
+        super( name, description,  startTime, duration);
     }
 
     @Override
@@ -40,7 +42,7 @@ public Subtask(Integer id, TypeTask type, String name, String description, Statu
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Subtask subtask = (Subtask) o;
-        return epicId.equals(subtask.epicId);
+        return Objects.equals(epicId, subtask.epicId);
     }
 
     @Override

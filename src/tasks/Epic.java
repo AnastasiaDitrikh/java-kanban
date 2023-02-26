@@ -1,5 +1,6 @@
-package model;
+package managers.tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,8 +8,6 @@ import java.util.Objects;
 
 public class Epic extends Task {
 
-//Я решила все методы связанные с удалением, сохранением и очисткой списка подзадач оставить в менеджере, т.к.
-// эти методы удаляют не только в эпике, но и в мапе подзадач и обновляют статус эпика при любой операции с подзадачей
 
     public List<Integer> subtaskIdList = new ArrayList<>();
 
@@ -20,6 +19,9 @@ public class Epic extends Task {
     public Epic(Integer id, TypeTask type, String name, String description, Status status) {
         super(id, type, name, description, status);
     }
+    public Epic(Integer id, TypeTask type, String name, String description, Status status, LocalDateTime startTime,long duration) {
+        super(id, type, name, description, status, startTime, duration);
+    }
 
     public List<Integer> getSubtaskIdList() {
         return subtaskIdList;
@@ -29,17 +31,22 @@ public class Epic extends Task {
         this.subtaskIdList = subtaskIdList;
     }
 
+    public Epic(String name, String description) {
+        super(name, description);
+    }
+
     @Override
     public String toString() {
         return  super.toString();
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return subtaskIdList.equals(epic.subtaskIdList);
+        return Objects.equals(subtaskIdList, epic.subtaskIdList);
     }
 
     @Override
