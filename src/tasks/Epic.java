@@ -1,6 +1,7 @@
-package managers.tasks;
+package tasks;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,18 +10,29 @@ import java.util.Objects;
 public class Epic extends Task {
 
 
-    public List<Integer> subtaskIdList = new ArrayList<>();
+    private List<Integer> subtaskIdList = new ArrayList<>();
+    private LocalDateTime endTime;
+
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
+        this.type = TypeTask.EPIC;
     }
+
     public Epic(Integer id, String name, String description, Status status) {
-        super(id, name, description, status);}
-    public Epic(Integer id, TypeTask type, String name, String description, Status status) {
-        super(id, type, name, description, status);
+        super(id, name, description, status);
+        this.type = TypeTask.EPIC;
     }
-    public Epic(Integer id, TypeTask type, String name, String description, Status status, LocalDateTime startTime,long duration) {
-        super(id, type, name, description, status, startTime, duration);
+
+    public Epic(Integer id, String name, String description, Status status, LocalDateTime startTime, long duration) {
+        super(id, name, description, status, startTime, duration);
+        this.type = TypeTask.EPIC;
+    }
+    public Epic() {
+    }
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+        this.type = TypeTask.EPIC;
     }
 
     public List<Integer> getSubtaskIdList() {
@@ -35,10 +47,17 @@ public class Epic extends Task {
         super(name, description);
     }
 
+    public void addSubtask(Integer id) {
+        subtaskIdList.add(id);
+    }
+
     @Override
     public String toString() {
-        return  super.toString();
+        return id + "," + TypeTask.EPIC + "," + name + "," + status + ","
+                + description + "," +  getStartTime() + "," + getDuration() + ",";
+
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -52,5 +71,10 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), subtaskIdList);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 }

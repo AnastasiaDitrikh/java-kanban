@@ -1,6 +1,4 @@
-package Tests;
-
-import service.*;
+package managers;
 
 import org.junit.jupiter.api.BeforeEach;
 

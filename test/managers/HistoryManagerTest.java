@@ -1,16 +1,16 @@
-package Tests;
+package managers;
 
-import model.*;
-import service.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.Managers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static model.Status.NEW;
-import static model.TypeTask.*;
+import static tasks.Status.NEW;
+import static tasks.TypeTask.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryManagerTest {
@@ -26,10 +26,10 @@ class HistoryManagerTest {
     @BeforeEach
     void fillHistory() {
         historyManager = Managers.getDefaultHistory();
-        task1 = new Task(1, TASK, "Покупки", "Список покупок", NEW);
-        epic1 = new Epic(2, EPIC, "Большая задача1", "Нужно было описать", NEW);
-        subtask1Epic1 = new Subtask(3, SUBTASK, "Подзадача1эпик1", "у меня нет фантазии", NEW, 2);
-        subtask2Epic1 = new Subtask(4, SUBTASK, "Подзадача2эпик1", "у меня нет фантазии совсем", NEW, 2);
+        task1 = new Task( 1, "Покупки", "Список покупок", NEW);
+        epic1 = new Epic(2, "Большая задача1", "Нужно было описать", NEW);
+        subtask1Epic1 = new Subtask(3,"Подзадача1эпик1", "у меня нет фантазии", NEW, 2);
+        subtask2Epic1 = new Subtask(4,"Подзадача2эпик1", "у меня нет фантазии совсем", NEW, 2);
     }
 
     @Test

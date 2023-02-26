@@ -1,4 +1,4 @@
-package managers.tasks;
+package tasks;
 
 public enum TypeTask {
     TASK,

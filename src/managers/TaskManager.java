@@ -1,19 +1,16 @@
-package service;
+package managers;
 
-import model.Epic;
-import model.Subtask;
-import model.Task;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.List;
-import java.util.Set;
 
 public interface TaskManager {
 
 
     //Task
     List<Task> getHistory();
-
-    void add(Task task);
 
     void saveTask(Task task);
 
@@ -41,7 +38,7 @@ public interface TaskManager {
     void removeEpicById(Integer id);
 
     //Subtask
-    void saveSubtask(Integer epicId, Subtask subtask);
+    void saveSubtask(Subtask subtask);
 
     Subtask getSubtaskById(Integer id);
 
@@ -54,7 +51,6 @@ public interface TaskManager {
     void removeSubtaskById(Integer id);
 
     List<Subtask> getEpicSubtasks(Integer EpicId);
-    Set<Task> getPrioritizedTasks();
 
     List<Task> getPrioritizedTasksList();
 

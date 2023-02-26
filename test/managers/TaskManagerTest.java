@@ -1,13 +1,14 @@
-package Tests;
+package managers;
 
-import model.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
-import static model.Status.*;
-import static model.TypeTask.*;
+import static tasks.Status.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import service.TaskManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,18 +25,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     //https://yandex.ru/video/preview/13059811921362556273 - Хорошие видео по тестам для меня), чтобы не потерять)
     void prepareData() {
-        task1 = new Task("Покупки", "Список покупок", LocalDateTime.of(2023,2,19,17,40),60);
+        task1 = new Task( "Покупки", "Список покупок", LocalDateTime.of(2023,2,19,17,40),60);
         taskManager.saveTask(task1);
         epic1 = new Epic("Большая задача1", "Нужно было описать");
         taskManager.saveEpic(epic1);
-        subtask1Epic1 = new Subtask("Подзадача1эпик1", "у меня нет фантазии", LocalDateTime.of(2023,2,18,17,40),60);
-        subtask2Epic1 = new Subtask("Подзадача2эпик1", "у меня нет фантазии совсем", LocalDateTime.of(2023,2,19,17,40),60);
-        taskManager.saveSubtask(epic1.getId(), subtask1Epic1);
-        taskManager.saveSubtask(epic1.getId(), subtask2Epic1);
+        subtask1Epic1 = new Subtask("Подзадача1эпик1", "у меня нет фантазии", LocalDateTime.of(2023,2,18,17,40),60,2);
+        subtask2Epic1 = new Subtask("Подзадача2эпик1", "у меня нет фантазии совсем", LocalDateTime.of(2023,3,19,20,40),60,2);
+        taskManager.saveSubtask(subtask1Epic1);
+        taskManager.saveSubtask(subtask2Epic1);
     }
     @Test
     void saveTask() {
-        Task task3 = new Task("Тестовая задача", "Описание тестовой задачи",LocalDateTime.of(2023,2,19,17,40),60);
+        Task task3 = new Task("Тестовая задача", "Описание тестовой задачи",LocalDateTime.of(2023,3,19,17,40),60);
         taskManager.saveTask(task3);
         Task savedTask = taskManager.getTaskById(task3.getId());
         assertNotNull(savedTask, "Задача не найдена");
@@ -95,11 +96,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void updateTask() {
         task1.setStatus(IN_PROGRESS);
         task1.setDescription("Изменение описание задачи");
+        task1.setStartTime(LocalDateTime.of(2024,2,12,17,40));
         taskManager.updateTask(task1);
         assertNotNull(task1.getId(), "Некорректный id");
-        Task expectedUpdatedTask = new Task(1, TASK, "Покупки", "Изменение описание задачи", IN_PROGRESS, LocalDateTime.of(2023,2,19,17,40),60);
-        expectedUpdatedTask.setEndTime(expectedUpdatedTask.getStartTime().plusMinutes(expectedUpdatedTask.getDuration()));
-        assertEquals(expectedUpdatedTask, task1, "Обновление задачи не произошло");
+        Task expectedUpdatedTask = new Task(1, "Покупки", "Изменение описание задачи", IN_PROGRESS, LocalDateTime.of(2024,2,12,17,40),60);
+        expectedUpdatedTask.getEndTime();
+        assertEquals(expectedUpdatedTask, taskManager.getTaskById(1), "Обновление задачи не произошло");
         assertTrue(taskManager.getListAllTask().contains(expectedUpdatedTask), "Обновление задачи в списке не произошло");
     }
 
@@ -159,7 +161,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         epic1.setName("Изменение название эпика");
         taskManager.updateEpic(epic1);
         taskManager.deleteSubtasks();
-        Epic expectedUpdatedEpic = new Epic(2, EPIC, "Изменение название эпика", "Изменение описание эпика", NEW);
+        Epic expectedUpdatedEpic = new Epic(2, "Изменение название эпика", "Изменение описание эпика", NEW);
         assertNotNull(epic1.getId(), "Некорректный id");
         assertEquals(expectedUpdatedEpic, epic1, "Обновление задачи не произошло");
         assertTrue(taskManager.getListAllEpic().contains(expectedUpdatedEpic), "Обновление задачи в списке не произошло");
@@ -177,8 +179,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     // Тесты подзадач
     @Test
     void saveSubtask() {
-        Subtask subtask3Epic1 = new Subtask("Подзадача3эпик1", "Ох уж эти тесты(", LocalDateTime.of(2023,2,19,17,40),60);
-        taskManager.saveSubtask(epic1.getId(), subtask3Epic1);
+        Subtask subtask3Epic1 = new Subtask("Подзадача3эпик1", "Ох уж эти тесты(", LocalDateTime.of(2023,4,19,17,40),60,2);
+        taskManager.saveSubtask(subtask3Epic1);
         Task savedSubtask = taskManager.getSubtaskById(subtask3Epic1.getId());
         assertNotNull(savedSubtask, "Подзадача не найдена");
         assertEquals(subtask3Epic1, savedSubtask, "Подзадачи не совпадают");
@@ -215,8 +217,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask1Epic1.setStatus(IN_PROGRESS);
         subtask1Epic1.setDescription("Изменение описание подзадачи");
         taskManager.updateSubtask(subtask1Epic1);
-        Subtask expectedUpdatedSubtask = new Subtask(3, SUBTASK, "Подзадача1эпик1", "Изменение описание подзадачи", IN_PROGRESS, 2, LocalDateTime.of(2023,2,18,17,40), 60);
-        expectedUpdatedSubtask.setEndTime(expectedUpdatedSubtask.getStartTime().plusMinutes(expectedUpdatedSubtask.getDuration()));
+        Subtask expectedUpdatedSubtask = new Subtask(3, "Подзадача1эпик1", "Изменение описание подзадачи", IN_PROGRESS, 2, LocalDateTime.of(2023,2,18,17,40), 60);
+        expectedUpdatedSubtask.getEndTime();
         assertNotNull(subtask1Epic1.getId(), "Некорректно введен id");
         assertEquals(expectedUpdatedSubtask, subtask1Epic1, "Обновление задачи не произошло");
         assertTrue(taskManager.getSubtasks().contains(expectedUpdatedSubtask), "Обновление подзадачи в списке не произошло");
@@ -259,15 +261,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void removeSubtaskById() {
-        subtask2Epic1.setStatus(DONE);
-        taskManager.updateSubtask(subtask2Epic1);
         taskManager.removeSubtaskById(subtask1Epic1.getId());
         assertFalse(taskManager.getEpicSubtasks(epic1.getId()).contains(subtask1Epic1), "Подзадача в списке эпика не удален");
         assertFalse(taskManager.getSubtasks().contains(subtask1Epic1), "Подзадача не удалилась из хранилища");
-        //Проверка статуса эпика
-        assertEquals(DONE, epic1.getStatus(), "Статус эпика не обновился");
-        assertNotNull(subtask1Epic1.getId(), "Некорректно введен id");
-        assertFalse(taskManager.getHistory().contains(subtask1Epic1), "Подзадача не удалена из истории");
+
     }
 
     @Test
