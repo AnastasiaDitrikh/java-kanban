@@ -66,8 +66,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     void shouldRestoreHistory() {
         taskManager.getSubtaskById(subtask1Epic1.getId());
-        taskManager.getTaskById(task1.getId());
         taskManager.getEpicById(epic1.getId());
+        taskManager.getTaskById(task1.getId());
         taskManager.getSubtaskById(subtask2Epic1.getId());
         List<Task> expectedHistory = taskManager.getHistory();
         file = new File("test/managers/filesTest/dataHistoryTest.csv");
@@ -95,7 +95,9 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         final Epic epic = new Epic(2, "Большая задача1", "Нужно было описать", NEW, LocalDateTime.of(2023, 2, 18, 17, 40), 120);
         epic.addSubtask(3);
         epic.addSubtask(4);
-        assertEquals(epic, taskManager.getEpicById(2), "Не соответствует");
+        epic.setEndTime(LocalDateTime.of(2023, 3, 19, 21, 40));
+        epic.setDuration(120);
+        assertEquals(epic, taskManager.epics.get(2), "Не соответствует");
         final Subtask subtask = new Subtask(4, "Подзадача2эпик1", "у меня нет фантазии совсем", NEW, 2, LocalDateTime.of(2023, 3, 19, 20, 40), 60);
         subtask.getEndTime();
         assertEquals(subtask, taskManager.getSubtaskById(4), "Не соответствует");

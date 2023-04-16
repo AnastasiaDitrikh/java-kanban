@@ -262,7 +262,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     public static void main(String[] args) {
+
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager("src/dataHistoryTask.csv");
+        //fileBackedTasksManager.loadFromFile("src/dataHistoryTask.csv");
         Task task1 = new Task( "Покупки", "Список покупок", LocalDateTime.of(2023, 2, 19, 17, 40), 60);
         fileBackedTasksManager.saveTask(task1);
         Task task2 = new Task( "Тренировка", "Программа", LocalDateTime.of(2023, 2, 9, 11, 30), 1000);
@@ -281,7 +283,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileBackedTasksManager.getTaskById(task1.getId());
         fileBackedTasksManager.removeTaskById(task2.getId());
         System.out.println(fileBackedTasksManager.getHistory());
-        //fileBackedTasksManager.loadFromFile("src/dataHistoryTask.csv");
+        fileBackedTasksManager.loadFromFile("src/dataHistoryTask.csv");
     }
 }
 

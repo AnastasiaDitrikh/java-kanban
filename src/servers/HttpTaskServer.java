@@ -77,7 +77,7 @@ public class HttpTaskServer {
                     System.out.println("Получены подзадачи эпика id=" + id);
                     sendText(h, response);
                 }
-                case "epic" -> handleEpic(h);
+                case "/epic" -> handleEpic(h);
                 default -> {
                     System.out.println("Неизвестный запрос: " + h.getRequestURI());
                     h.sendResponseHeaders(404, 0);
@@ -139,6 +139,11 @@ public class HttpTaskServer {
                     sendText(h, response);
                 }
             }
+            default -> {
+                System.out.println("Неизвестный метод: " + h.getRequestMethod());
+                h.sendResponseHeaders(405, 0);
+
+            }
         }
     }
 
@@ -192,6 +197,10 @@ public class HttpTaskServer {
                     final String response = gson.toJson(subtask);
                     sendText(h, response);
                 }
+            }
+            default -> {
+                System.out.println("Неизвестный метод: " + h.getRequestMethod());
+                h.sendResponseHeaders(405, 0);
             }
         }
     }
@@ -247,6 +256,10 @@ public class HttpTaskServer {
                     final String response = gson.toJson(epic);
                     sendText(h, response);
                 }
+            }
+            default -> {
+                System.out.println("Неизвестный метод: " + h.getRequestMethod());
+                h.sendResponseHeaders(405, 0);
             }
         }
     }

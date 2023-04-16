@@ -8,9 +8,10 @@ import servers.LocalDateTimeTypeAdapter;
 import java.time.LocalDateTime;
 
 public class Managers {
+    private static final String KVSERVER_URL="http://localhost:8078/";
 
     public static TaskManager getDefault() {
-        return new HttpTaskManager(8078);
+        return new HttpTaskManager(KVSERVER_URL);
     }
 
     public static HistoryManager getDefaultHistory() {

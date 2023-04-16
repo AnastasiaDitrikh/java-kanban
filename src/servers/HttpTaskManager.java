@@ -12,65 +12,74 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-    private final Gson gson;
+    private static final Gson gson = Managers.getGson();
     private final KVClient client;
 
-    public HttpTaskManager(int port) {
-        this(port, false);
+    public HttpTaskManager(String url) {
+        this(url, false);
     }
 
-    public HttpTaskManager(int port, boolean load) {
+    public HttpTaskManager(String url, boolean load) {
         super(null);
-        gson = Managers.getGson();
-        client = new KVClient(port);
+        client = new KVClient(url);
         if (load) {
             load();
         }
     }
 
     protected void addTasks(List<? extends Task> tasks) {
-       if (tasks==null){
-           System.out.println("Cписок задач для добавления пуст");
-       }
+        if (tasks==null){
+            return;
+        }
         for (Task task : tasks) {
-            int key=task.getId();
-            if (key>idGen){
-                idGen=key;
+            int key = task.getId()+1;
+            if (key > idGen) {
+                idGen = key;
             }
-            TypeTask typeTask=task.getType();
-            switch (typeTask){
+            TypeTask typeTask = task.getType();
+            switch (typeTask) {
                 case TASK -> {
-                    this.tasks.put(key, task);
+                    this.tasks.put(task.getId(), task);
                     prioritizedTasks.add(task);
                 }
                 case SUBTASK -> {
-                    subtasks.put(key,(Subtask) task);
+                    subtasks.put(task.getId(), (Subtask) task);
                     prioritizedTasks.add(task);
                 }
                 case EPIC -> {
-                    epics.put(key,(Epic) task);
+                    epics.put(task.getId(), (Epic) task);
                 }
             }
         }
     }
 
     private void load() {
-        ArrayList<Task> tasks = gson.fromJson(client.load("tasks"), new TypeToken<ArrayList<Task>>() {
+
+        List<Task> tasks = gson.fromJson(client.load("tasks"), new TypeToken<ArrayList<Task>>() {
         }.getType());
         addTasks(tasks);
 
-        ArrayList<Epic> epics = gson.fromJson(client.load("epics"), new TypeToken<ArrayList<Epic>>() {
+        List<Epic> epics = gson.fromJson(client.load("epics"), new TypeToken<ArrayList<Epic>>() {
         }.getType());
         addTasks(epics);
 
-        ArrayList<Subtask> subtasks = gson.fromJson(client.load("subtasks"), new TypeToken<ArrayList<Subtask>>() {
+        List<Subtask> subtasks = gson.fromJson(client.load("subtasks"), new TypeToken<ArrayList<Subtask>>() {
         }.getType());
         addTasks(subtasks);
 
+
         List<Integer> history = gson.fromJson(client.load("history"), new TypeToken<ArrayList<Integer>>() {
         }.getType());
-        for (Integer taskId : history) {
-            historyManager.add(tasks.get(taskId));
+        if (history!=null){
+            for (Integer taskId : history) {
+                if (this.tasks.containsKey(taskId)) {
+                    historyManager.add(this.tasks.get(taskId));
+                } else if (this.epics.containsKey(taskId)) {
+                    historyManager.add(this.epics.get(taskId));
+                } else if (this.subtasks.containsKey(taskId)) {
+                    historyManager.add(this.subtasks.get(taskId));
+                }
+            }
         }
     }
 

@@ -12,9 +12,9 @@ public class KVClient {
     private final String url;
     private final String apiToken;
 
-    public KVClient(int port) {
-        url = "http://localhost:" + port + "/";
-        apiToken = register(url);
+    public KVClient(String url) {
+        this.url = url;
+        this.apiToken = register(url);
     }
 
 

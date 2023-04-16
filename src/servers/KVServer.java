@@ -45,9 +45,9 @@ public class KVServer {
                     return;
                 }
                 String value=data.get(key);
-                if (value.isEmpty()) {
-                    System.out.println("Не возможно достать данные для ключа " + key + ", данные отсутствуют!");
-                    h.sendResponseHeaders(400, 0);
+                if (value==null) {
+                    System.out.println("Данные по ключу " + key + " временно отсутствуют!");
+                    h.sendResponseHeaders(200, 0);
                     return;
                 }
                 sendText(h, value);

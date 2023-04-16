@@ -13,17 +13,16 @@ import static tasks.Status.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        /*TaskManager taskManager=Managers.getDefault();
+ /*       TaskManager taskManager=Managers.getDefault();
         HttpTaskServer httpTaskServer= new HttpTaskServer(taskManager);
         Task task1 = new Task( "Покупки", "Список покупок", LocalDateTime.of(2023,2,19,17,40),60);
         taskManager.saveTask(task1);
         httpTaskServer.start();
 */
-
         //checkMethods();
         //checkHistory();
 
-        TaskManager taskManager= new HttpTaskManager(8078, true);
+        TaskManager taskManager= new HttpTaskManager("http://localhost:8078/", true);
         System.out.println(taskManager.getListAllTask());
 
     }
