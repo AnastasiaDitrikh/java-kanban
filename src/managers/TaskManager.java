@@ -6,8 +6,10 @@ import tasks.Task;
 
 import java.util.List;
 
+/**
+ * Интерфейс для управления задачами, эпиками и подзадачами.
+ */
 public interface TaskManager {
-
 
     //Task
     List<Task> getHistory();
@@ -53,6 +55,4 @@ public interface TaskManager {
     List<Subtask> getEpicSubtasks(Integer EpicId);
 
     List<Task> getPrioritizedTasksList();
-
-
 }
