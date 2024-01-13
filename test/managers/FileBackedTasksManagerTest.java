@@ -1,20 +1,18 @@
 package managers;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-
-import static tasks.Status.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tasks.Status.NEW;
 
 
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
@@ -133,5 +131,3 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         assertEquals(epic, taskManager.getEpicById(3), "Не соответствует");
     }
 }
-
-

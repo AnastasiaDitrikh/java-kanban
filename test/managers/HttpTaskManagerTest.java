@@ -4,17 +4,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import servers.HttpTaskManager;
-
 import servers.KVServer;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
 import java.io.IOException;
-
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
 
@@ -59,28 +58,28 @@ class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
         taskManager.getSubtaskById(subtask1Epic1.getId());
         HttpTaskManager httpTaskManager = new HttpTaskManager("http://localhost:8078/", true);
 
-        List<Task> tasksFromTaskManager= taskManager.getListAllTask();
+        List<Task> tasksFromTaskManager = taskManager.getListAllTask();
         assertEquals(1, tasksFromTaskManager.size());
-        assertEquals(tasksFromTaskManager, httpTaskManager.getListAllTask(),"Список задач после выгрузки не совпададает");
+        assertEquals(tasksFromTaskManager, httpTaskManager.getListAllTask(), "Список задач после выгрузки не совпададает");
 
-        List<Epic> epicsFromTaskManager= taskManager.getListAllEpic();
+        List<Epic> epicsFromTaskManager = taskManager.getListAllEpic();
         assertEquals(1, epicsFromTaskManager.size());
-        assertEquals(epicsFromTaskManager, httpTaskManager.getListAllEpic(),"Список эпиков после выгрузки не совпададает");
+        assertEquals(epicsFromTaskManager, httpTaskManager.getListAllEpic(), "Список эпиков после выгрузки не совпададает");
 
-        List<Subtask> subtasksFromTaskManager= taskManager.getSubtasks();
+        List<Subtask> subtasksFromTaskManager = taskManager.getSubtasks();
         assertEquals(2, subtasksFromTaskManager.size());
-        assertEquals(subtasksFromTaskManager, httpTaskManager.getSubtasks(),"Список подзадач после выгрузки не совпададает");
+        assertEquals(subtasksFromTaskManager, httpTaskManager.getSubtasks(), "Список подзадач после выгрузки не совпададает");
 
 
-        List<Task> historyFromTaskManager= taskManager.getHistory();
+        List<Task> historyFromTaskManager = taskManager.getHistory();
         assertEquals(2, historyFromTaskManager.size());
-        assertEquals(historyFromTaskManager, httpTaskManager.getHistory(),"Список истории после выгрузки не совпададает");
+        assertEquals(historyFromTaskManager, httpTaskManager.getHistory(), "Список истории после выгрузки не совпададает");
 
-        List<Task> priorityFromTaskManager= taskManager.getPrioritizedTasksList();
-        assertEquals(3,  priorityFromTaskManager.size());
-        assertEquals( priorityFromTaskManager, httpTaskManager.getPrioritizedTasksList(),"Список задач после выгрузки не совпададает");
+        List<Task> priorityFromTaskManager = taskManager.getPrioritizedTasksList();
+        assertEquals(3, priorityFromTaskManager.size());
+        assertEquals(priorityFromTaskManager, httpTaskManager.getPrioritizedTasksList(), "Список задач после выгрузки не совпададает");
 
-        assertEquals(5,taskManager.getIdGen());
+        assertEquals(5, taskManager.getIdGen());
         assertEquals(taskManager.getIdGen(), httpTaskManager.getIdGen(), "Поле idGen не совпадает после выгрузки");
     }
 }

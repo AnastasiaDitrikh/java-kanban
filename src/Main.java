@@ -1,17 +1,12 @@
-
+import managers.TaskManager;
 import servers.HttpTaskManager;
-import servers.HttpTaskServer;
-import tasks.Task;
-import tasks.Subtask;
-import tasks.Epic;
-import managers.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-
-import static tasks.Status.*;
 
 public class Main {
+    /**
+     * Класс для ручного тестирования
+     */
     public static void main(String[] args) throws IOException {
  /*       TaskManager taskManager=Managers.getDefault();
         HttpTaskServer httpTaskServer= new HttpTaskServer(taskManager);
@@ -22,7 +17,7 @@ public class Main {
         //checkMethods();
         //checkHistory();
 
-        TaskManager taskManager= new HttpTaskManager("http://localhost:8078/", true);
+        TaskManager taskManager = new HttpTaskManager("http://localhost:8078/", true);
         System.out.println(taskManager.getListAllTask());
 
     }
@@ -142,9 +137,4 @@ public class Main {
         System.out.println(taskManager.getHistory());
 
     }*/
-
-
-
-    }
-
-
+}

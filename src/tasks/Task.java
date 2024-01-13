@@ -1,11 +1,12 @@
 package tasks;
 
 import java.time.LocalDateTime;
-
 import java.util.Objects;
 
+/**
+ * Класс задача
+ */
 public class Task {
-
 
     protected Integer id;
     protected String name;
@@ -13,10 +14,7 @@ public class Task {
     protected Status status;
     protected long duration;
     protected LocalDateTime startTime;
-
     protected TypeTask type;
-
-
 
     public Task(String name, String description, LocalDateTime startTime, long duration) {
         this.name = name;
@@ -129,7 +127,6 @@ public class Task {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
-
 
     @Override
     public boolean equals(Object o) {

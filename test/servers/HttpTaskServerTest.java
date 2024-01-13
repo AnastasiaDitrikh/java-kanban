@@ -17,7 +17,8 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HttpTaskServerTest {
     static HttpTaskServer httpTaskServer;
@@ -92,6 +93,7 @@ class HttpTaskServerTest {
         }.getType());
         assertEquals(subtask1Epic1, subtasks.get(0), "Подзадачи нет");
     }
+
     @Test
     public void handleEpics() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/epic");
@@ -117,9 +119,10 @@ class HttpTaskServerTest {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Subtask subtaskFromServer = gson.fromJson(response.body(), Subtask.class);
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
         assertEquals(subtask1Epic1, subtaskFromServer, "Подзадачи нет");
     }
+
     @Test
     public void handleTaskCheckGet() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/task?id=1");
@@ -130,7 +133,7 @@ class HttpTaskServerTest {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Task taskFromServer = gson.fromJson(response.body(), Task.class);
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
         assertEquals(task1, taskFromServer, "Задачи нет");
     }
 
@@ -144,45 +147,47 @@ class HttpTaskServerTest {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         Epic epicFromServer = gson.fromJson(response.body(), Epic.class);
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
         assertEquals(epic1, epicFromServer, "Задачи нет");
     }
 
     @Test
     public void handleTaskCheckPost() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/task?id=1");
-        String taskInGson= gson.toJson(task1);
+        String taskInGson = gson.toJson(task1);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(taskInGson))
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
+
     @Test
     public void handleSubtaskCheckPost() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/subtask?id=3");
-        String subtaskInGson= gson.toJson(subtask1Epic1);
+        String subtaskInGson = gson.toJson(subtask1Epic1);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(subtaskInGson))
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
+
     @Test
     public void handleEpicCheckPost() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/epic?id=2");
-        String epicInGson= gson.toJson(epic1);
+        String epicInGson = gson.toJson(epic1);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(epicInGson))
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
 
 
@@ -195,8 +200,9 @@ class HttpTaskServerTest {
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
+
     @Test
     public void handleSubtaskCheckDelete() throws IOException, InterruptedException {
         URI uri = URI.create("http://localhost:8080/tasks/subtask?id=3");
@@ -206,7 +212,7 @@ class HttpTaskServerTest {
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
 
     @Test
@@ -218,7 +224,7 @@ class HttpTaskServerTest {
                 .uri(uri)
                 .build();
         HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
 
     @Test
@@ -233,8 +239,6 @@ class HttpTaskServerTest {
         List<Task> history = gson.fromJson(response.body(), new TypeToken<List<Task>>() {
         }.getType());
         assertNotNull(history, "История пуста");
-        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен "+response.statusCode());
+        assertEquals(200, response.statusCode(), "Код ответа неверен, ожидалось 200, а получен " + response.statusCode());
     }
-
-
 }

@@ -28,6 +28,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
+    /**
+     * Загружает данные из файла и создает экземпляр `FileBackedTasksManager` на основе этих данных.
+     *
+     * @param path путь к файлу, из которого нужно загрузить данные.
+     * @return экземпляр `FileBackedTasksManager`, содержащий загруженные данные из файла.
+     */
     public static FileBackedTasksManager loadFromFile(String path) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(path);
         List<String> content = readFileContentsOrNull(path); //  содержимое файла "src/dataHistoryTask.csv"
@@ -92,14 +98,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         int idCounter = 1;
         for (Integer id : allTasksMap.keySet()) {
-            if (idCounter<id){
-                idCounter=id;
+            if (idCounter < id) {
+                idCounter = id;
             }
         }
         fileBackedTasksManager.setIdGen(idCounter);
         return fileBackedTasksManager;
     }
 
+    /**
+     * Преобразует строку истории в список id задач(истории)
+     *
+     * @param value последняя строка(строка истории) из файла
+     * @return список ids
+     */
     private static List<Integer> historyFromString(String value) {
         List<Integer> historyFromStringList = new ArrayList<>();
         if (!value.isBlank()) {
@@ -111,7 +123,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return historyFromStringList;
     }
 
-
+    /**
+     * Сохраняет данные в файл.
+     * Записывает информацию о задачах, эпиках, подзадачах и истории в файл с использованием FileWriter.
+     * Если происходит ошибка ввода-вывода (IOException) то, выбрасывается исключение ManagerSaveException.
+     */
     protected void save() {
         final String historyInString = historyToString(historyManager);
         try (FileWriter fileWriter = new FileWriter(String.valueOf(dataHistoryTask))) {
@@ -136,7 +152,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-
+    /**
+     * Преобразует историю задач из объекта HistoryManager в строку.
+     *
+     * @param manager объект HistoryManager, содержащий историю задач.
+     * @return строка чисел (история задач, ids задач).
+     */
     private static String historyToString(HistoryManager manager) {
         List<Task> history = manager.getHistory();
         StringBuilder sb = new StringBuilder();
@@ -149,6 +170,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return sb.toString();
     }
 
+    /**
+     * Читает содержимое файла и возвращает список строк, представляющих содержимое файла.
+     * Если происходит ошибка ввода-вывода (IOException), выводится сообщение об ошибке и возвращается пустой список строк.
+     *
+     * @param path путь к файлу, который нужно прочитать.
+     * @return список строк, представляющих содержимое файла, или пустой список, если возникла ошибка.
+     */
     private static List<String> readFileContentsOrNull(String path) {
         try {
             return Files.readAllLines(Path.of(path));
@@ -260,14 +288,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-
+    /**
+     * Главный метод программы.
+     * Создает экземпляр `FileBackedTasksManager` на основе файла "src/dataHistoryTask.csv".
+     * Создает и сохраняет задачи, эпики и подзадачи.
+     * Выполняет операции получения данных по идентификаторам задач, эпиков и подзадач.
+     * Удаляет задачу по идентификатору.
+     * Выводит историю задач.
+     * Загружает данные из файла после удаления задачи.
+     */
     public static void main(String[] args) {
 
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager("src/dataHistoryTask.csv");
         //fileBackedTasksManager.loadFromFile("src/dataHistoryTask.csv");
-        Task task1 = new Task( "Покупки", "Список покупок", LocalDateTime.of(2023, 2, 19, 17, 40), 60);
+        Task task1 = new Task("Покупки", "Список покупок", LocalDateTime.of(2023, 2, 19, 17, 40), 60);
         fileBackedTasksManager.saveTask(task1);
-        Task task2 = new Task( "Тренировка", "Программа", LocalDateTime.of(2023, 2, 9, 11, 30), 1000);
+        Task task2 = new Task("Тренировка", "Программа", LocalDateTime.of(2023, 2, 9, 11, 30), 1000);
         fileBackedTasksManager.saveTask(task2);
         Epic epic1 = new Epic("Большая задача1", "Нужно было описать");
         fileBackedTasksManager.saveEpic(epic1);

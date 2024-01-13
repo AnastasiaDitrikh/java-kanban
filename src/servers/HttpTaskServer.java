@@ -9,10 +9,8 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -28,6 +26,12 @@ public class HttpTaskServer {
         this(Managers.getDefault());
     }
 
+    /**
+     * Создает экземпляр `HttpTaskServer` с указанным экземпляром `TaskManager`.
+     *
+     * @param taskManager экземпляр `TaskManager`, который будет использоваться для обработки запросов.
+     * @throws IOException если возникает ошибка при создании сервера.
+     */
     public HttpTaskServer(TaskManager taskManager) throws IOException {
         this.taskManager = taskManager;
         gson = Managers.getGson();
@@ -35,11 +39,22 @@ public class HttpTaskServer {
         server.createContext("/tasks", this::handler);
     }
 
+    /**
+     * Запускает сервер `HttpTaskServer` и начинает прослушивать входящие запросы.
+     *
+     * @throws IOException если возникает ошибка при запуске сервера.
+     */
     public static void main(String[] args) throws IOException {
         final HttpTaskServer server = new HttpTaskServer();
         server.start();
     }
 
+    /**
+     * Обрабатывает HTTP запросы.
+     * Выполняет обработку различных маршрутов и типов запросов, таких как GET, POST и т. д.
+     *
+     * @param h объект HttpExchange, представляющий полученный HTTP запрос.
+     */
     private void handler(HttpExchange h) {
         try (h) {
             System.out.println("\n/tasks: " + h.getRequestURI());
@@ -88,6 +103,13 @@ public class HttpTaskServer {
         }
     }
 
+    /**
+     * Обрабатывает HTTP запросы для маршрута `/task`.
+     * Выполняет операции GET, DELETE и POST в зависимости от метода запроса.
+     *
+     * @param h объект HttpExchange, представляющий полученный HTTP запрос.
+     * @throws IOException если возникает ошибка при отправке ответа на запрос.
+     */
     private void handleTask(HttpExchange h) throws IOException {
         final String query = h.getRequestURI().getQuery();
         switch (h.getRequestMethod()) {
@@ -147,6 +169,13 @@ public class HttpTaskServer {
         }
     }
 
+    /**
+     * Обрабатывает HTTP запросы для маршрута `/subtask`.
+     * Выполняет операции GET, DELETE и POST в зависимости от метода запроса.
+     *
+     * @param h объект HttpExchange, представляющий полученный HTTP запрос.
+     * @throws IOException если возникает ошибка при отправке ответа на запрос.
+     */
     private void handleSubtask(HttpExchange h) throws IOException {
         final String query = h.getRequestURI().getQuery();
         switch (h.getRequestMethod()) {
@@ -205,7 +234,13 @@ public class HttpTaskServer {
         }
     }
 
-
+    /**
+     * Обрабатывает HTTP запросы для маршрута `/epic`.
+     * Выполняет операции GET, DELETE и POST в зависимости от метода запроса.
+     *
+     * @param h объект HttpExchange, представляющий полученный HTTP запрос.
+     * @throws IOException если возникает ошибка при отправке ответа на запрос.
+     */
     private void handleEpic(HttpExchange h) throws IOException {
         final String query = h.getRequestURI().getQuery();
         switch (h.getRequestMethod()) {
@@ -264,27 +299,47 @@ public class HttpTaskServer {
         }
     }
 
+    /**
+     * Запускает сервер и начинает прослушивать входящие запросы на указанном порту.
+     * Выводит информацию о запуске сервера в консоль.
+     */
     public void start() {
         System.out.println("Запускаем сервер на порту " + PORT);
         System.out.println("Открой в браузере http://localhost:" + PORT + "/");
         server.start();
     }
 
+    /**
+     * Останавливает сервер на указанном порту.
+     * Выводит информацию об остановке сервера в консоль.
+     */
     public void stop() {
         server.stop(0);
         System.out.println("Остановили сервер на порту " + PORT);
     }
 
+    /**
+     * Читает текст из запроса.
+     *
+     * @param h объект HttpExchange, представляющий полученный HTTP запрос.
+     * @return строка, представляющая текст из запроса.
+     * @throws IOException если возникает ошибка ввода-вывода при чтении текста.
+     */
     protected String readText(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), UTF_8);
     }
 
+    /**
+     * Отправляет текст в ответ на запрос.
+     *
+     * @param h    объект HttpExchange, представляющий полученный HTTP запрос.
+     * @param text текст, который нужно отправить в ответ.
+     * @throws IOException если возникает ошибка ввода-вывода при отправке ответа.
+     */
     protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);
     }
-
-
 }

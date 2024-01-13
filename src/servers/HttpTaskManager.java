@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import managers.FileBackedTasksManager;
 import managers.Managers;
-import tasks.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 import tasks.TypeTask;
 
 import java.util.ArrayList;
@@ -19,6 +21,12 @@ public class HttpTaskManager extends FileBackedTasksManager {
         this(url, false);
     }
 
+    /**
+     * Класс `HttpTaskManager` управляет задачами, используя HTTP-соединение для загрузки и сохранения данных.
+     *
+     * @param url  URL-адрес для HTTP-соединения.
+     * @param load флаг, определяющий необходимость загрузки данных при создании экземпляра `HttpTaskManager`.
+     */
     public HttpTaskManager(String url, boolean load) {
         super(null);
         client = new KVClient(url);
@@ -27,12 +35,17 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }
     }
 
+    /**
+     * Добавляет задачи в список задач для управления.
+     *
+     * @param tasks список задач, которые необходимо добавить.
+     */
     protected void addTasks(List<? extends Task> tasks) {
-        if (tasks==null){
+        if (tasks == null) {
             return;
         }
         for (Task task : tasks) {
-            int key = task.getId()+1;
+            int key = task.getId() + 1;
             if (key > idGen) {
                 idGen = key;
             }
@@ -53,8 +66,10 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }
     }
 
+    /**
+     * Загружает задачи и историю из удаленного источника данных с использованием HTTP-соединения.
+     */
     private void load() {
-
         List<Task> tasks = gson.fromJson(client.load("tasks"), new TypeToken<ArrayList<Task>>() {
         }.getType());
         addTasks(tasks);
@@ -67,10 +82,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }.getType());
         addTasks(subtasks);
 
-
         List<Integer> history = gson.fromJson(client.load("history"), new TypeToken<ArrayList<Integer>>() {
         }.getType());
-        if (history!=null){
+        if (history != null) {
             for (Integer taskId : history) {
                 if (this.tasks.containsKey(taskId)) {
                     historyManager.add(this.tasks.get(taskId));
@@ -83,6 +97,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }
     }
 
+    /**
+     * Сохраняет задачи и историю в удаленный источник данных с использованием HTTP-соединения.
+     */
     @Override
     protected void save() {
         String jsonTasks = gson.toJson((new ArrayList<>(tasks.values())));
@@ -91,7 +108,6 @@ public class HttpTaskManager extends FileBackedTasksManager {
         client.put("subtasks", jsonSubtasks);
         String jsonEpics = gson.toJson((new ArrayList<>(epics.values())));
         client.put("epics", jsonEpics);
-
         String jsonHistory = gson.toJson(historyManager.getHistory().stream().map(Task::getId).collect(Collectors.toList()));
         client.put("history", jsonHistory);
     }
