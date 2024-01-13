@@ -25,7 +25,8 @@
 
 # Tech Stack 🔧
 
-# Java Core, JUnit 5, Gson, HttpServer, KVServer
+ Java Core, JUnit 5, Gson, HttpServer, KVServer
+
 # API Reference ⚙️
 
     GET tasks/ - получить список приоритетных задач
